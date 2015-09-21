@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+	<title>little sweetie</title>
+	<style>
+		body, html {
+			width:100%;
+			height: 100%;
+			margin:0;
+		}
+		* { box-sizing: border-box; }
+		#bkg {
+			position:fixed;
+			width:100%;
+			height:100%;
+			z-index: -1;
+		}
+		#bkg img {
+			width:100%;
+			height:100%;
+		}
+		#ls {
+			font-family:cursive;
+			color:blue;
+			font-size:100px;
+		}
+		.song {
+			position:fixed;
+			top:0;
+			left:0;
+			width:180px;
+			cursor:pointer;
+		}
+		.song img {
+			width:100%;
+		}
+		.blink {
+			position:absolute;
+			top:0;
+			left:45%;
+
+		}
+
+	</style>
+</head>
+<body>
+	<div id="bkg">
+		<img src="IMG_2007.jpg" />
+	</div>
+	<div id="ls">little sweetie</div>
+
+	<div id="songs">
+		
+		<div class="song">
+			<p class="blink">click me</p>
+			<img src="gif.gif" />
+			<audio src="hassles.mp3"></audio>
+		</div>
+		<div class="song">
+			<p class="blink">click me</p>
+			<img src="gif.gif" />
+			<audio src="birds.mp3"></audio>
+		</div>
+		<div class="song">
+			<p class="blink">click me</p>
+			<img src="gif.gif" />
+			<audio src="streets.mp3"></audio>
+		</div>
+	</div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script>
+		var bkgimgs = ["IMG_2007.jpg","IMG_2008.jpg","IMG_2009.jpg","IMG_2010.jpg","IMG_2011.jpg","IMG_2012.jpg","IMG_2013.jpg","IMG_2014.jpg","IMG_2015.jpg","IMG_2016.jpg"];
+		var imgnum = bkgimgs.length;
+		var cnt = 0;
+
+		var w = window.innerWidth;
+		var h = window.innerHeight;
+
+		var title = "little sweetie ";
+
+		var songs = $('.song');
+		console.log(songs);
+		var songnum = songs.length;
+		var sc = 0;
+
+		console.log(songnum);
+
+		Number.prototype.clamp = function(min, max) {
+		  return Math.min(Math.max(this, min), max);
+		};
+
+		
+
+		$(songs).on('click', function() {
+			$('audio').each(function() {
+				this.pause();
+				this.currentTime = 0;
+			});
+			$(this).find('audio')[0].play();
+		});
+
+
+
+		function step() {
+
+			/* bkg image */
+			if(cnt < imgnum - 1) cnt++;
+			else cnt = 0;
+			$('#bkg img').attr('src', bkgimgs[cnt]);
+
+			var t = title.charAt(0);
+			title = title.substr(1);
+			
+			title = title + t;
+			document.title = title;
+
+			$('#ls').text(title);
+			$('#ls').css('color', "rgb("+Math.floor(Math.random()*255)+", "+Math.floor(Math.random()*255)+", "+Math.floor(Math.random()*255)+")");
+			//$('#ls').css({color:"rgb(100, 120, 109)"});
+
+			$(songs).each( function() {
+				var tt = $(this).css('top');
+				var lt = $(this).css('left');
+
+				tt = +tt.replace("px","");
+				lt = +lt.replace("px","");
+
+				tt += Math.floor(Math.random() * 7) + Math.floor(Math.random() * -3);
+				lt += Math.floor(Math.random() * 7) + Math.floor(Math.random() * -3);
+				tt.clamp(0, w);
+				lt.clamp(0, h);
+
+				$(this).css({top:tt+"px", left:lt+"px"});
+			});
+
+			setTimeout( function() {
+				window.requestAnimationFrame(step);
+			}, 200);
+		}
+
+		window.requestAnimationFrame(step);
+	</script>
+</body>
+</html>
+
+
+
+
+<!-- https://www.youtube.com/watch?v=gt_49g1MHwU // hassles
+https://www.youtube.com/watch?v=_ALPmRk3Ht4 // conference of the birds
+ -->
